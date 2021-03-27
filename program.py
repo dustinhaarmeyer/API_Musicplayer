@@ -75,8 +75,7 @@ def before():
 
 @app.route('/get_state/busy', methods=['GET'])
 def busy():
-    #print(pygame.mixer.music.get_busy())
-    return pygame.mixer.music.get_busy()
+    return str(pygame.mixer.music.get_busy())
 
 @app.route('/stop', methods=['GET'])
 def stop():
@@ -93,11 +92,4 @@ if __name__ == "__main__":
     p.start()
     sleep(3)
     print('After Flask run')
-    while busy()==False:
-            sleep(0.1)
-    sleep(1)
-    while True:
-        while busy():
-            sleep(0.1)
-        sleep(1)
-        next()
+    
