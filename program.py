@@ -73,7 +73,7 @@ def before():
     print('Going back')
     return redirect("/")
 
-@app.route('/back/get_state/busy', methods=['GET'])
+@app.route('/get_state/busy', methods=['GET'])
 def busy():
     #print(pygame.mixer.music.get_busy())
     return pygame.mixer.music.get_busy()
