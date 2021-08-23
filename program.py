@@ -12,22 +12,13 @@ import multiprocessing
 app = flask.Flask(__name__)
 #app.config["DEBUG"] = True
 
-actual = 0
-plN = 0
-a = 0
+buttons = [7, 8, 10, 11, 12, 13, 15, 16, 18, 19, 21, 22, 23, 24, 26, 29, 31, 32, 33, 35, 36, 37, 38, 40]
 
-musicDir = '/test/'
-os.chdir(musicDir)
-playlist = os.listdir()
+musicDir = '/test/'     #musicDir button fileType
+fileType = '.mp4'   #In der Pygame Dokumentation nach den passenden Dateitypen suchen!!!!
 
-print (playlist)
 pygame.init()
 pygame.mixer.init()
-pygame.mixer.music.load(playlist[actual])
-
-for numbers in playlist:
-    plN += 1
-print(plN)
 
 @app.route('/', methods=['GET'])
 def home():
@@ -36,49 +27,20 @@ def home():
 @app.route('/button/', methods=['GET', 'POST'])  #http://{thisdevice}:5000/button?button={button Number}
 def button():
     #pygame.mixer.music.play()
-    #print('Play')
+    print('/button called')
     button =str(request.args.get('button'))
-    return redirect("/")    #"<h1>Start Playing now</p>"
+    if int(button) in buttons:
+        pygame.mixer.music.load(musicDir + button + fileType)
+        pygame.mixer.music.play()
+        return "Start"
+    else:
+        return "Error, button not in list"
 
 @app.route('/play', methods=['GET'])
 def play():
     pygame.mixer.music.play()
     print('Play')
     return redirect("/")    #"<h1>Start Playing now</p>"
-
-@app.route('/resume', methods=['GET'])
-def resume():
-    pygame.mixer.music.unpause()
-    print('Resume')
-    return redirect("/")
-
-@app.route('/pause', methods=['GET'])
-def pause():
-    pygame.mixer.music.pause()
-    return redirect("/")
-
-@app.route('/next', methods=['GET'])
-def next():
-    stop()
-    global actual
-    actual += 1
-    if actual >= plN:
-        actual = 0
-    pygame.mixer.music.load(playlist[actual])
-    sleep(1)
-    play()
-    print('Playing next')
-    return redirect("/")
-
-@app.route('/back', methods=['GET'])
-def before():
-    global actual
-    actual -= 1
-    pygame.mixer.music.load(playlist[actual])
-    stop()
-    play()
-    print('Going back')
-    return redirect("/")
 
 @app.route('/get_state/busy', methods=['GET'])
 def busy():
