@@ -6,7 +6,7 @@ import pygame
 import time
 from time import sleep
 import flask
-from flask import redirect
+from flask import redirect, request
 import multiprocessing
 
 app = flask.Flask(__name__)
@@ -32,6 +32,13 @@ print(plN)
 @app.route('/', methods=['GET'])
 def home():
     return '<a href="play">->Play</a> <br> <a href="pause">->Pause</a> <br> <a href="resume">->Resume</a> <br> <a href="next">->Next</a> <br> <a href="back">->Back</a> <br> <a href="stop">->Stop</a>'
+
+@app.route('/button/', methods=['GET', 'POST'])  #http://{thisdevice}:5000/button?button={button Number}
+def button():
+    #pygame.mixer.music.play()
+    #print('Play')
+    button =str(request.args.get('button'))
+    return redirect("/")    #"<h1>Start Playing now</p>"
 
 @app.route('/play', methods=['GET'])
 def play():
